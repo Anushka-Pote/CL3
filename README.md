@@ -104,12 +104,97 @@ Hottest in 2010    30
 
 ---
 
-## 🛠️ Optional: Clean Up
+To run your Hadoop **MapReduce Java program** locally or on a Hadoop setup, follow these **complete steps** to **compile, package, and execute** the code using Hadoop commands (not just Java commands).
 
-```bash
-hadoop fs -rm -r /input /output
+---
+
+## ✅ Prerequisites
+
+* Java JDK installed (`java -version`)
+* Hadoop installed and configured (`hadoop version`)
+* Environment variables set: `JAVA_HOME`, `HADOOP_HOME`, `PATH`
+* Input file ready (`input.txt`)
+* Your MapReduce code is saved in a `.java` file
+
+---
+
+## ✅ Step-by-Step: Run Hadoop MapReduce Java Program
+
+### 📝 Step 1: Save Your Code
+
+Save your MapReduce code (e.g., the character count version) in a file named:
+
+```
+CharacterCountMR.java
 ```
 
 ---
 
-Let me know if you'd like a ready-made batch script to automate this whole process.
+### 🧑‍💻 Step 2: Compile the Code Using Hadoop Compiler
+
+Open terminal (or command prompt) and run:
+
+```bash
+hadoop com.sun.tools.javac.Main CharacterCountMR.java
+```
+
+This compiles the `.java` file and generates `.class` files.
+
+---
+
+### 📦 Step 3: Create a JAR File
+
+Create a JAR file named `charcount.jar`:
+
+```bash
+jar cf charcount.jar CharacterCountMR*.class
+```
+
+> This packages all generated `.class` files into a JAR.
+
+---
+
+### 📂 Step 4: Prepare Input File in HDFS
+
+Assume you have a text file `input.txt`.
+
+```bash
+hdfs dfs -mkdir -p /user/yourname/input
+hdfs dfs -put input.txt /user/yourname/input/
+```
+
+> Replace `yourname` with your actual Hadoop user.
+
+---
+
+### 🚀 Step 5: Run the MapReduce Job
+
+Run the job using:
+
+```bash
+hadoop jar charcount.jar CharacterCountMR /user/yourname/input /user/yourname/output
+```
+
+* `/user/yourname/input` is the HDFS input directory
+* `/user/yourname/output` is the HDFS output directory (must not already exist)
+
+---
+
+### 📄 Step 6: View the Output
+
+```bash
+hdfs dfs -cat /user/yourname/output/part-r-00000
+```
+
+This will show character frequencies like:
+
+```
+H	1
+a	2
+d	2
+...
+```
+
+---
+
+
